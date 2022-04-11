@@ -9,42 +9,45 @@ import java.util.Set;
 
 public class HashMapDrills {
 
+  private static File getFileByName(String fileName) {
+    String path = HashMapDrills.class.getResource(fileName).getFile();
+    return new File(path);
+  }
+
   public static void main(String[] args) throws FileNotFoundException {
-    String path = ArrayDrills.class.getResource("studentEmails.txt").getFile();
-    File teacherFile = new File(path);
-    Scanner scanner = new Scanner(teacherFile);
+    File contactsFile = getFileByName("studentEmails.txt");
+    Scanner contactScanner = new Scanner(contactsFile);
+    Map<String, String> contactInfo = new HashMap<>();
 
-    //Create a HashMap of student names to email addresses
-    Map<String, String> contacts = new HashMap<String, String>();
-    while(scanner.hasNextLine()) {
-      String[] pair = scanner.nextLine().split(", ");
-      contacts.put(pair[0], pair[1]);
+    System.out.println("\n--- Read in lines from studentEmails.txt and store them in a hashmap with the name as the key ---");
+    while(contactScanner.hasNextLine()) {
+      String currentLine = contactScanner.nextLine();
+      String[] pair = currentLine.split(", ");
+      contactInfo.put(pair[0], pair[1]);
     }
-    scanner.close();
+    System.out.println(contactInfo);
 
-    //list out each student's name
-    Set<String> names = contacts.keySet();
-    for(String name : names) {
-      System.out.println(name);
-    }
+    System.out.println("\n--- Print out each student's name line by line ---");
+    Set<String> keys = contactInfo.keySet();
 
-    //using data from the above task, output all emails on file
-    for(String name : names) {
-      System.out.println(contacts.get(name));
+    for(String key : keys) {
+      System.out.println(key);
     }
 
-    //create an array list of all names that have thenorth.com in their email
-    List<String> northerners = new ArrayList<String>();
-    final String northEmail = "thenorth.com";
-    for(String name : names) {
-      if(contacts.get(name).contains(northEmail)) {
-        northerners.add(name);
+    System.out.println("\n--- Print out each student's email using the keyset above ---");
+    for(String key : keys) {
+      System.out.println(contactInfo.get(key));
+    }
+
+    System.out.println("\n--- Create a list of all names that have thenorth.com in their email ---");
+    for(String key : keys) {
+      if(contactInfo.get(key).contains("thenorth.com")){
+        System.out.println(key);
       }
+
     }
 
-    //output the northerner names
-    for(String name : northerners) {
-      System.out.println(name);
-    }
+    System.out.println("\n--- Print out the northeners line by line ---");
+
   }
 }
